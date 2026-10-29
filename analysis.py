@@ -28,6 +28,16 @@ for y in df.index[1:]:
 res = pd.DataFrame(rows).round(2)
 assert ((res.overseas_contrib_pp + res.domestic_contrib_pp - res.total_growth_pct).abs() < 0.02).all()
 res.to_csv("data/results.csv", index=False)
+# Sensitivity: 2024 base on a comparable (passenger+pickup) scope, derived from the reported +145%
+sens = pd.read_csv("data/sensitivity.csv").set_index("case")
+alt24 = sens.loc["alt_comparable", "overseas_sales"]
+p, c = df.loc[2024], df.loc[2025]
+alt = dict(case="2024→2025(2024基数按可比口径推算)",
+           overseas_contrib_pp=round((c.overseas_sales - alt24) / p.total_sales * 100, 2),
+           domestic_contrib_pp=round((c.total_sales - p.total_sales - (c.overseas_sales - alt24)) / p.total_sales * 100, 2),
+           overseas_yoy_pct=round((c.overseas_sales / alt24 - 1) * 100, 1))
+pd.DataFrame([alt]).to_csv("data/results_sensitivity.csv", index=False)
+print("sensitivity:", alt)
 print(df[["total_sales", "overseas_sales", "domestic", "overseas_share"]].round(4))
 print(res.to_string(index=False))
 
@@ -44,7 +54,7 @@ for r, v in zip(b, shares):
 ax.set_ylabel("海外销量占总销量比例 (%)"); ax.set_ylim(0, 52)
 ax.set_title("比亚迪:海外销量占比从 8% 升至 43%", loc="left", color=INK)
 for s in ("top", "right"): ax.spines[s].set_visible(False)
-fig.text(.01, .01, "2026年1-9月占比为媒体引述值(来源S7);口径:海外销量/总销量,见README局限性", fontsize=7, color=GREY)
+fig.text(.01, .01, "2026年1-9月占比为媒体引述值(S10);海外口径:2023-24为乘用车,2025起为乘用车及皮卡,见README", fontsize=7, color=GREY)
 fig.tight_layout(rect=(0, .03, 1, 1)); fig.savefig("charts/01_overseas_share.png", dpi=200); plt.close()
 
 # Chart 2: waterfall of growth contribution (pp)
@@ -66,5 +76,5 @@ for ax, (_, r) in zip(axes, res.iterrows()):
     for s in ("top", "right"): ax.spines[s].set_visible(False)
 axes[0].set_ylabel("对总销量增速的贡献 (百分点)")
 fig.suptitle("比亚迪销量增长拆解:2025年增长全部来自海外,国内为负贡献", x=.01, ha="left", color=INK)
-fig.text(.01, .01, "贡献(pp) = 该部分销量变化 / 上年总销量;海外为四舍五入值,国内=总销量−海外(口径差异见README)", fontsize=7, color=GREY)
+fig.text(.01, .01, "贡献(pp)=该部分销量变化/上年总销量;国内=总销量−海外;2025年海外含皮卡,按可比口径推算为+14.5pp(见README)", fontsize=7, color=GREY)
 fig.tight_layout(rect=(0, .03, 1, .95)); fig.savefig("charts/02_growth_contribution.png", dpi=200); plt.close()

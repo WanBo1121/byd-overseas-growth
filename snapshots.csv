@@ -1,0 +1,11 @@
+period,metric,value,unit,source,note
+2025-12,total_sales,420398,units,S1,新能源汽车合计
+2025-12,overseas_sales,133172,units,S1,公告口径"出口新能源汽车合计"
+2026-01,overseas_sales,100009,units,S7,乘用车及皮卡海外销售;同比+43.3%(媒体报道)
+2026-08,overseas_sales,188746,units,S8,乘用车及皮卡海外销售;同比+134.6%(媒体称为公司在投资者活动中的表述)
+2026-09,total_sales,463561,units,S9,新车销售总量
+2026-09,overseas_sales,179877,units,S9,乘用车及皮卡海外销售;同比+153.9%
+2026-01~09,overseas_sales,1337831,units,S8+S9,1-8月累计1157954加9月179877(自行相加);与媒体称"1-9月133.78万辆"吻合
+2026-01~09,overseas_share,0.427,ratio,S10,媒体引述:占集团总销量42.7%
+2025,overseas_revenue_cny_100m,3107,100m CNY,S11,2025年境外营业额(媒体转载年报);占总营收约38.6%
+2025,total_revenue_cny_100m,8039.6,100m CNY,S11,同比约+3.5%
